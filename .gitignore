@@ -1,0 +1,23 @@
+# Xcode
+.DS_Store
+DerivedData/
+*.xcarchive/
+*.ipa
+*.app
+*.dSYM
+*.xcuserdatad/
+*.xcuserstate
+xcuserdata/
+
+# CocoaPods
+Pods/ # Uncomment if you don't commit Pods directory
+
+# Carthage
+Carthage/Build/
+
+# Swift Package Manager
+.build/
+
+# Other
+*.swp
+*.bak
