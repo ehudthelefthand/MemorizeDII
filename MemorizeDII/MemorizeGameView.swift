@@ -10,7 +10,7 @@ import SwiftUI
 
 struct MemorizeGameView: View {
 
-    @ObservedObject var viewModel = MemorizeGameViewModel()
+    @ObservedObject var viewModel = EmojiMemorizeGameViewModel()
 
     var body: some View {
         AspectVGrid(
@@ -28,7 +28,7 @@ struct MemorizeGameView: View {
 
 struct CardView: View {
 
-    let card: MemorizeGameViewModel.Card
+    let card: EmojiMemorizeGameViewModel.Card
 
     var body: some View {
         ZStack {

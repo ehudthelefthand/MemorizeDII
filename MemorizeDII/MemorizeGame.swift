@@ -7,19 +7,26 @@
 
 import Foundation
 
-struct MemorizeGame {
+struct MemorizeGame<CardContent> where CardContent: Equatable {
 
-//    private(set) var cards: [Card] = [
-//        Card(id: 1, content: "😀"),
-//        Card(id: 2, content: "😀"),
-//        Card(id: 3, content: "😆"),
-//        Card(id: 4, content: "😆"),
-//    ]
+    private(set) var cards: [Card] = []
 
-    private(set) var cards: [Card]
-
-    init(cards: [Card]) {
-        self.cards = cards
+    init(numberOfPairs: Int, createContent: (Int) -> CardContent) {
+        for pairIndex in 0..<numberOfPairs {
+            let content = createContent(pairIndex)
+            cards.append(
+                Card(
+                    id: pairIndex * 2,
+                    content: content
+                )
+            )
+            cards.append(
+                Card(
+                    id: pairIndex * 2 + 1,
+                    content: content
+                )
+            )
+        }
     }
 
     private var indexOfOneAndOnlyOneFaceUpCard: Int? {
@@ -48,9 +55,9 @@ struct MemorizeGame {
         print(cards)
     }
 
-    struct Card {
+    struct Card: Identifiable {
         let id: Int
-        let content: String
+        let content: CardContent
         var isFaceUp: Bool = false
         var isMatched: Bool = false
     }
