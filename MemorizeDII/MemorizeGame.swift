@@ -9,12 +9,18 @@ import Foundation
 
 struct MemorizeGame {
 
-    private(set) var cards: [Card] = [
-        Card(id: 1, content: "😀"),
-        Card(id: 2, content: "😀"),
-        Card(id: 3, content: "😆"),
-        Card(id: 4, content: "😆"),
-    ]
+//    private(set) var cards: [Card] = [
+//        Card(id: 1, content: "😀"),
+//        Card(id: 2, content: "😀"),
+//        Card(id: 3, content: "😆"),
+//        Card(id: 4, content: "😆"),
+//    ]
+
+    private(set) var cards: [Card]
+
+    init(cards: [Card]) {
+        self.cards = cards
+    }
 
     private var indexOfOneAndOnlyOneFaceUpCard: Int? {
         get { cards.indices.filter { cards[$0].isFaceUp }.oneAndOnly }
@@ -22,8 +28,6 @@ struct MemorizeGame {
     }
 
     mutating func pickCard(card: Card)  {
-        let preivousPickIndex = cards.firstIndex(where: { $0.isFaceUp })
-
         if let index = cards.firstIndex(where: { $0.id == card.id }),
            !cards[index].isFaceUp,
            !cards[index].isMatched {
@@ -61,5 +65,3 @@ extension Array {
         }
     }
 }
-
-
