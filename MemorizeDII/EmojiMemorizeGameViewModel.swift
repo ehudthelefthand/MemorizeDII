@@ -1,5 +1,5 @@
 //
-//  MemorizeGameViewModel.swift
+//  EmojiMemorizeGameViewModel.swift
 //  MemorizeDII
 //
 //  Created by Peerawat Poombua on 4/10/25.
@@ -44,6 +44,10 @@ class EmojiMemorizeGameViewModel: ObservableObject {
 
     func pickCard(card: Card) {
         game.pickCard(card: card)
+    }
+
+    func shuffle() {
+        game.shuffle()
     }
 }
 

@@ -50,15 +50,16 @@ struct MemorizeGame<CardContent> where CardContent: Equatable {
 
             cards[index].isFaceUp = true
         }
+    }
 
-        print("============")
-        print(cards)
+    mutating func shuffle() {
+        cards.shuffle()
     }
 
     struct Card: Identifiable {
         let id: Int
         let content: CardContent
-        var isFaceUp: Bool = false
+        var isFaceUp: Bool = true
         var isMatched: Bool = false
     }
 }

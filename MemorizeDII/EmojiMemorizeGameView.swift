@@ -1,5 +1,5 @@
 //
-//  MemorizeGameView.swift
+//  EmojiMemorizeGameView.swift
 //  MemorizeDII
 //
 //  Created by Peerawat Poombua on 1/10/25.
@@ -8,21 +8,29 @@
 import SwiftUI
 
 
-struct MemorizeGameView: View {
+struct EmojiMemorizeGameView: View {
 
     @ObservedObject var viewModel = EmojiMemorizeGameViewModel()
 
     var body: some View {
-        AspectVGrid(
-            cards: viewModel.cards,
-            aspectRatio: 2/3
-        ) { card in
-            CardView(card: card)
-                .onTapGesture {
-                    viewModel.pickCard(card: card)
+        VStack {
+            AspectVGrid(
+                cards: viewModel.cards,
+                aspectRatio: 2/3
+            ) { card in
+                CardView(card: card)
+                    .onTapGesture {
+                        viewModel.pickCard(card: card)
+                    }
+            }
+            .padding(.all, 8)
+            Button("Shuffle") {
+                withAnimation(.default) {
+                    viewModel.shuffle()
                 }
+            }
+            .font(.largeTitle)
         }
-        .padding(.all, 8)
     }
 }
 
@@ -53,5 +61,5 @@ struct CardView: View {
 }
 
 #Preview {
-    MemorizeGameView()
+    EmojiMemorizeGameView()
 }
