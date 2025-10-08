@@ -31,7 +31,7 @@ class EmojiMemorizeGameViewModel: ObservableObject {
     ]
 
     private static func createGame() -> MemorizeGame<String> {
-        MemorizeGame(numberOfPairs: 8) { pairIndex in
+        MemorizeGame(numberOfPairs: 1) { pairIndex in
             emojis[pairIndex]
         }
     }

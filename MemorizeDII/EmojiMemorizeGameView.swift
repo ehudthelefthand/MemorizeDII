@@ -30,7 +30,7 @@ struct EmojiMemorizeGameView: View {
             cards: viewModel.cards,
             aspectRatio: 2/3
         ) { card in
-            if dealt.contains(card.id) {
+//            if dealt.contains(card.id) {
                 CardView(card: card)
                     .transition(.asymmetric(insertion: .identity, removal: .opacity))
                     .matchedGeometryEffect(id: card.id, in: dealingCardNamespace)
@@ -38,7 +38,7 @@ struct EmojiMemorizeGameView: View {
                     .onTapGesture {
                         viewModel.pickCard(card: card)
                     }
-            }
+//            }
         }
         .padding(.all, 8)
     }
@@ -105,24 +105,40 @@ struct CardView: View {
     let card: EmojiMemorizeGameViewModel.Card
 
     var body: some View {
-        ZStack {
-            let shape = RoundedRectangle(cornerRadius: 16)
-            if card.isFaceUp {
-                shape
-                    .fill(Color.white)
-                    .strokeBorder(lineWidth: 8)
-                Text(card.content)
-                    .font(.largeTitle)
-            } else if (card.isMatched) {
-                shape
-                    .fill(Color.clear)
-            } else {
-                shape
-                    .fill(Color.green)
+        GeometryReader { geometry in
+            ZStack {
+                let shape = RoundedRectangle(cornerRadius: 16)
+                if card.isFaceUp {
+                    shape
+                        .fill(Color.white)
+                        .strokeBorder(lineWidth: 8)
+                    rectangle
+                    Text(card.content)
+                        .font(font(in: geometry.size))
+                } else if (card.isMatched) {
+                    shape
+                        .fill(Color.clear)
+                } else {
+                    shape
+                        .fill(Color.green)
+                }
             }
+            .padding(.all, 4)
+            .foregroundStyle(.green)
         }
-        .padding(.all, 4)
-        .foregroundStyle(.green)
+    }
+
+    var rectangle: some View {
+        Pie(
+            startAngle: Angle(degrees: 0),
+            endAngle: Angle(degrees: 360)
+        )
+        .frame(width: 150, height: 150)
+        .opacity(0.6)
+    }
+
+    private func font(in size: CGSize) -> Font {
+        Font.system(size: min(size.width, size.height) * 0.7)
     }
 }
 
