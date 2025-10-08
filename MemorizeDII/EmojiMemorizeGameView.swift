@@ -32,8 +32,9 @@ struct EmojiMemorizeGameView: View {
         ) { card in
             if dealt.contains(card.id) {
                 CardView(card: card)
-                    .transition(.move(edge: .bottom))
+                    .transition(.asymmetric(insertion: .identity, removal: .opacity))
                     .matchedGeometryEffect(id: card.id, in: dealingCardNamespace)
+                    .zIndex(zIndex(of: card))
                     .onTapGesture {
                         viewModel.pickCard(card: card)
                     }
@@ -49,6 +50,8 @@ struct EmojiMemorizeGameView: View {
                     if !dealt.contains(card.id) {
                         CardView(card: card)
                             .matchedGeometryEffect(id: card.id, in: dealingCardNamespace)
+                            .transition(.asymmetric(insertion: .opacity, removal: .identity))
+                            .zIndex(zIndex(of: card))
                     }
                 }
             }
@@ -58,7 +61,7 @@ struct EmojiMemorizeGameView: View {
             )
             .onTapGesture {
                 for card in viewModel.cards {
-                    withAnimation {
+                    withAnimation(dealingAnimation(card)) {
                         deal(card)
                     }
                 }
@@ -71,12 +74,29 @@ struct EmojiMemorizeGameView: View {
                 }
                 Spacer()
                 Button("Reset") {
-                    dealt = Set<Int>()
+                    withAnimation {
+                        dealt = Set<Int>()
+                    }
                 }
             }
             .padding()
             .font(.largeTitle)
         }
+    }
+
+
+    private func zIndex(of card: EmojiMemorizeGameViewModel.Card) -> Double {
+        -Double(viewModel.cards.firstIndex(where: { $0.id == card.id }) ?? 0)
+    }
+
+    private func dealingAnimation(_ card: EmojiMemorizeGameViewModel.Card) -> Animation {
+        let totalDealtingDuration = 2.0
+        let ratio = totalDealtingDuration / Double(viewModel.cards.count)
+        var delay = 0.0
+        if let index = viewModel.cards.firstIndex(where: { $0.id == card.id }) {
+            delay = Double(index) * ratio
+        }
+        return .easeInOut.delay(delay)
     }
 }
 

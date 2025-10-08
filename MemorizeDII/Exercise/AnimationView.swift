@@ -1,5 +1,5 @@
 //
-//  Animation.swift
+//  AnimationExercise.swift
 //  MemorizeDII
 //
 //  Created by Peerawat Poombua on 5/10/25.
@@ -13,7 +13,7 @@ import SwiftUI
 // - In/Out view hierachy -> Transition
 // - State changed (Intent)
 
-struct Animation: View {
+struct AnimationExercise: View {
 
     @State var position = CGPoint.zero
     @State var isCircleScaled = false
@@ -73,5 +73,5 @@ struct Animation: View {
 }
 
 #Preview {
-    Animation()
+    AnimationExercise()
 }
