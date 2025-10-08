@@ -10,7 +10,7 @@ import SwiftUI
 struct AspectVGrid<ItemView>: View where ItemView: View  {
     var cards: [EmojiMemorizeGameViewModel.Card]
     var aspectRatio: CGFloat
-    var content: (EmojiMemorizeGameViewModel.Card) -> ItemView
+    @ViewBuilder var content: (EmojiMemorizeGameViewModel.Card) -> ItemView
 
     var body: some View {
         GeometryReader { geometry in

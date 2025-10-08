@@ -7,28 +7,74 @@
 
 import SwiftUI
 
-
 struct EmojiMemorizeGameView: View {
 
     @ObservedObject var viewModel = EmojiMemorizeGameViewModel()
 
     var body: some View {
         VStack {
-            AspectVGrid(
-                cards: viewModel.cards,
-                aspectRatio: 2/3
-            ) { card in
+            gameBody
+            deckBody
+        }
+    }
+
+    @State private var dealt = Set<Int>()
+    @Namespace private var dealingCardNamespace
+
+    private func deal(_ card: EmojiMemorizeGameViewModel.Card) {
+        dealt.insert(card.id)
+    }
+
+    var gameBody: some View {
+        AspectVGrid(
+            cards: viewModel.cards,
+            aspectRatio: 2/3
+        ) { card in
+            if dealt.contains(card.id) {
                 CardView(card: card)
+                    .transition(.move(edge: .bottom))
+                    .matchedGeometryEffect(id: card.id, in: dealingCardNamespace)
                     .onTapGesture {
                         viewModel.pickCard(card: card)
                     }
             }
-            .padding(.all, 8)
-            Button("Shuffle") {
-                withAnimation(.default) {
-                    viewModel.shuffle()
+        }
+        .padding(.all, 8)
+    }
+
+    var deckBody: some View {
+        VStack {
+            ZStack {
+                ForEach(viewModel.cards) { card in
+                    if !dealt.contains(card.id) {
+                        CardView(card: card)
+                            .matchedGeometryEffect(id: card.id, in: dealingCardNamespace)
+                    }
                 }
             }
+            .frame(
+                width: 100,
+                height: 150,
+            )
+            .onTapGesture {
+                for card in viewModel.cards {
+                    withAnimation {
+                        deal(card)
+                    }
+                }
+            }
+            HStack {
+                Button("Shuffle") {
+                    withAnimation(.default) {
+                        viewModel.shuffle()
+                    }
+                }
+                Spacer()
+                Button("Reset") {
+                    dealt = Set<Int>()
+                }
+            }
+            .padding()
             .font(.largeTitle)
         }
     }
