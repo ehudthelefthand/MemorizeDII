@@ -47,12 +47,12 @@ struct EmojiMemorizeGameView: View {
         VStack {
             ZStack {
                 ForEach(viewModel.cards) { card in
-                    if !dealt.contains(card.id) {
+//                    if !dealt.contains(card.id) {
                         CardView(card: card)
                             .matchedGeometryEffect(id: card.id, in: dealingCardNamespace)
                             .transition(.asymmetric(insertion: .opacity, removal: .identity))
                             .zIndex(zIndex(of: card))
-                    }
+//                    }
                 }
             }
             .frame(
@@ -104,6 +104,8 @@ struct CardView: View {
 
     let card: EmojiMemorizeGameViewModel.Card
 
+    @State var animatedBonusRemaining: Double = 0
+
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -112,7 +114,7 @@ struct CardView: View {
                     shape
                         .fill(Color.white)
                         .strokeBorder(lineWidth: 8)
-                    rectangle
+                    circular
                     Text(card.content)
                         .font(font(in: geometry.size))
                 } else if (card.isMatched) {
@@ -128,13 +130,19 @@ struct CardView: View {
         }
     }
 
-    var rectangle: some View {
+    var circular: some View {
         Pie(
-            startAngle: Angle(degrees: 0),
-            endAngle: Angle(degrees: 360)
+            startAngle: Angle(degrees: 0-90),
+            endAngle: Angle(degrees: (1-animatedBonusRemaining)*360-90)
         )
         .frame(width: 150, height: 150)
         .opacity(0.6)
+        .onAppear {
+            animatedBonusRemaining = card.bonusRemaining
+            withAnimation(.linear(duration: card.bonusTimeRemaining)) {
+                animatedBonusRemaining = 0
+            }
+        }
     }
 
     private func font(in size: CGSize) -> Font {

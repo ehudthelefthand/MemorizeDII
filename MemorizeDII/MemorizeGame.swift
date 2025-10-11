@@ -61,6 +61,28 @@ struct MemorizeGame<CardContent> where CardContent: Equatable {
         let content: CardContent
         var isFaceUp: Bool = true
         var isMatched: Bool = false
+
+        let bonusTimeLimit: TimeInterval = 6
+
+        var faceUpTime: TimeInterval {
+            if let lastFaceUpTime = lastFaceUpTime {
+                return pastFaceUpTime + Date().timeIntervalSince(lastFaceUpTime)
+            } else {
+                return pastFaceUpTime
+            }
+        }
+
+        var lastFaceUpTime: Date?
+
+        var pastFaceUpTime: TimeInterval = 0
+
+        var bonusRemaining: Double {
+            (bonusTimeLimit > 0 && bonusTimeRemaining > 0) ? bonusTimeRemaining/bonusTimeLimit : 0
+        }
+
+        var bonusTimeRemaining: TimeInterval {
+            max(0, bonusTimeLimit - faceUpTime)
+        }
     }
 }
 
